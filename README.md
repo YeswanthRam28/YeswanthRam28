@@ -76,8 +76,6 @@ I don't wait for qualifications. I learn by shipping.
 
 ---
 
----
-
 ## 📊 GitHub Stats
 
 <div align="center">
