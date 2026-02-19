@@ -7,7 +7,7 @@ const MotionSpan = motion.span as any;
 
 const Hero: React.FC = () => {
   const title = "YESWANTHRAM";
-  
+
   return (
     <section className="relative min-h-screen flex flex-col justify-center px-6 pt-20 overflow-hidden">
       {/* Background decoration - now horizontal at the top left */}
@@ -27,24 +27,40 @@ const Hero: React.FC = () => {
           </MotionDiv>
         </div>
 
-        {/* Horizontal display for name */}
-        <h1 className="flex flex-row flex-wrap text-[10vw] lg:text-[11vw] leading-none font-black tracking-tighter">
-          {title.split('').map((char, i) => (
-            <div key={i} className="overflow-hidden inline-block mr-[0.05em]">
-              <MotionSpan
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 1.2, delay: 0.1 + i * 0.03, ease: [0.76, 0, 0.24, 1] }}
-                className="inline-block"
-              >
-                {char}
-              </MotionSpan>
-            </div>
-          ))}
+        {/* Vertical display for name */}
+        <h1 className="text-[10vw] lg:text-[11vw] leading-[0.85] font-black tracking-tighter">
+          <div className="flex flex-row flex-wrap">
+            {"YESWANTH".split('').map((char, i) => (
+              <div key={i} className="overflow-hidden inline-block mr-[0.05em]">
+                <MotionSpan
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 1.2, delay: 0.1 + i * 0.03, ease: [0.76, 0, 0.24, 1] }}
+                  className="inline-block"
+                >
+                  {char}
+                </MotionSpan>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-row flex-wrap">
+            {"RAM".split('').map((char, i) => (
+              <div key={i} className="overflow-hidden inline-block mr-[0.05em]">
+                <MotionSpan
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 1.2, delay: 0.4 + i * 0.03, ease: [0.76, 0, 0.24, 1] }}
+                  className="inline-block"
+                >
+                  {char}
+                </MotionSpan>
+              </div>
+            ))}
+          </div>
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mt-20 items-end">
-          <MotionDiv 
+          <MotionDiv
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2 }}
@@ -54,8 +70,8 @@ const Hero: React.FC = () => {
               Pushing the boundaries of <span className="italic font-normal">Artificial Intelligence</span> and high-fidelity software architecture.
             </p>
           </MotionDiv>
-          
-          <MotionDiv 
+
+          <MotionDiv
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.4 }}

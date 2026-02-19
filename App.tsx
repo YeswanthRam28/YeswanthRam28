@@ -21,7 +21,7 @@ const App: React.FC = () => {
   return (
     <div className="relative bg-black selection:bg-white selection:text-black min-h-screen">
       <CustomCursor />
-      
+
       <AnimatePresence mode="wait">
         {isLoading && <LoadingScreen key="loader" />}
       </AnimatePresence>
@@ -30,7 +30,7 @@ const App: React.FC = () => {
         <>
           <ThreeBackground />
           <Navbar />
-          
+
           <main className="relative z-10">
             <Hero />
             <About />
@@ -38,14 +38,14 @@ const App: React.FC = () => {
             <Skills />
 
             <section id="contact" className="py-64 px-6 bg-white text-black text-center">
-               <div className="mono text-xs tracking-widest mb-8 uppercase">Initiate Connection</div>
-               <a href="mailto:yeswanth.engr@gmail.com" className="text-5xl md:text-[12vw] font-black leading-none tracking-tighter hover:italic transition-all block overflow-hidden uppercase">
-                  Say Hello
-               </a>
-               <div className="mt-20 flex justify-center gap-12 mono text-xs tracking-widest uppercase">
-                  <a href="https://linkedin.com" target="_blank" className="border-b border-black hover:opacity-50 transition-opacity">LinkedIn</a>
-                  <a href="https://github.com/yeswanthram28" target="_blank" rel="noopener noreferrer" className="border-b border-black hover:opacity-50 transition-opacity">GitHub</a>
-               </div>
+              <div className="mono text-xs tracking-widest mb-8 uppercase">Initiate Connection</div>
+              <a href="mailto:yeswanthram.2007@gmail.com" className="text-5xl md:text-[12vw] font-black leading-none tracking-tighter hover:italic transition-all block overflow-hidden uppercase">
+                Say Hello
+              </a>
+              <div className="mt-20 flex justify-center gap-12 mono text-xs tracking-widest uppercase">
+                <a href="https://www.linkedin.com/in/yeswanth-ram-jp-053002386/" target="_blank" className="border-b border-black hover:opacity-50 transition-opacity">LinkedIn</a>
+                <a href="https://github.com/yeswanthram28" target="_blank" rel="noopener noreferrer" className="border-b border-black hover:opacity-50 transition-opacity">GitHub</a>
+              </div>
             </section>
           </main>
         </>

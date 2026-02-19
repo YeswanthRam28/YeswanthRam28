@@ -21,8 +21,8 @@ const Navbar: React.FC = () => {
     <>
       <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ${scrolled ? 'p-4' : 'p-8'}`}>
         <div className="max-w-[1400px] mx-auto flex justify-between items-center">
-          <MotionA 
-            href="#" 
+          <MotionA
+            href="#"
             className="text-xl font-black tracking-tighter"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -38,8 +38,8 @@ const Navbar: React.FC = () => {
                 </a>
               ))}
             </div>
-            
-            <button 
+
+            <button
               onClick={() => setIsOpen(!isOpen)}
               className="w-10 h-10 flex flex-col items-center justify-center gap-1.5 group"
             >
@@ -81,13 +81,13 @@ const Navbar: React.FC = () => {
                   <div className="mono text-[10px] opacity-40 mb-4">SOCIAL</div>
                   <div className="flex flex-col gap-2 font-bold text-sm">
                     <a href="https://github.com/yeswanthram28" target="_blank">GITHUB</a>
-                    <a href="#">LINKEDIN</a>
+                    <a href="https://www.linkedin.com/in/yeswanth-ram-jp-053002386/" target="_blank">LINKEDIN</a>
                   </div>
                 </div>
                 <div>
                   <div className="mono text-[10px] opacity-40 mb-4">CONTACT</div>
                   <div className="flex flex-col gap-2 font-bold text-sm">
-                    <a href="mailto:yeswanth.engr@gmail.com">EMAIL</a>
+                    <a href="mailto:yeswanthram.2007@gmail.com">EMAIL</a>
                   </div>
                 </div>
               </div>
