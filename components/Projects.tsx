@@ -9,10 +9,6 @@ const MotionDiv = motion.div as any;
 
 // Map specific descriptions to projects as requested
 const PROJECT_METADATA: Record<string, { desc: string; tags: string[] }> = {
-  'Defy': {
-    desc: 'An MCP-powered autonomous AI trading agent that executes crypto trades via smart contracts while logging every decision on-chain for full transparency, auditability, and trustless AI–Web3 integration.',
-    tags: ['AI', 'Web3', 'MCP', 'Blockchain']
-  },
   'Hawkeye': {
     desc: 'Advanced computer vision system designed for real-time object detection and spatial awareness in complex environments.',
     tags: ['Computer Vision', 'Python', 'Real-time']
@@ -21,31 +17,26 @@ const PROJECT_METADATA: Record<string, { desc: string; tags: string[] }> = {
     desc: 'Neural network architecture optimized for high-speed synchronization across distributed intelligence nodes.',
     tags: ['Deep Learning', 'Neural Networks', 'Systems']
   },
-  'Zero-Touch': {
+  'Zero-touch': {
     desc: 'An automation framework designed for zero-intervention deployments and self-healing cloud infrastructure.',
     tags: ['DevOps', 'Automation', 'Infrastructure']
   },
   'Jarvis': {
     desc: 'A voice-integrated assistant leveraging LLMs for context-aware task management and home automation.',
     tags: ['LLM', 'Voice AI', 'Automation']
-  },
-  'medi_report_analyser': {
-    desc: 'An AI-driven medical report analysis tool that extracts and synthesizes clinical data into actionable insights for healthcare providers.',
-    tags: ['Healthcare AI', 'NLP', 'Data Analysis']
   }
 };
 
 const ALLOWED_PROJECTS = [
-  'Hawkeye', 
-  'NeuroSync', 
-  'Zero-Touch', 
-  'Defy', 
-  'Jarvis', 
-  'medi_report_analyser'
+  'NeuroSync',
+  'Hawkeye',
+  'Zero-touch',
+  'Jarvis'
 ];
 
+
 const ProjectItem: React.FC<{ repo: GithubRepo; index: number }> = ({ repo, index }) => {
-  const metadata = PROJECT_METADATA[repo.name] || { 
+  const metadata = PROJECT_METADATA[repo.name] || {
     desc: repo.description || "A technical exploration into the mechanics of digital innovation and architecture.",
     tags: repo.topics || []
   };
@@ -59,25 +50,25 @@ const ProjectItem: React.FC<{ repo: GithubRepo; index: number }> = ({ repo, inde
       className={`group relative w-full mb-32 md:mb-64 flex flex-col ${index % 2 === 0 ? 'md:items-start' : 'md:items-end'}`}
     >
       <div className="relative w-full md:w-[60%] overflow-hidden aspect-[16/10] bg-zinc-900 border border-white/5">
-        <MotionDiv 
+        <MotionDiv
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 1.5, ease: [0.33, 1, 0.68, 1] }}
           className="w-full h-full flex items-center justify-center text-[10vw] font-black opacity-10 select-none uppercase"
         >
           {repo.name.charAt(0)}
         </MotionDiv>
-        
+
         {/* Overlay info on hover */}
         <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center p-12">
-           <div className="text-center">
-              <p className="mono text-xs uppercase tracking-[0.3em] mb-4 text-white/60">Technology Stack</p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {metadata.tags.map(t => (
-                  <span key={t} className="px-3 py-1 border border-white/20 text-[10px] uppercase">{t}</span>
-                ))}
-                {repo.language && <span className="px-3 py-1 bg-white text-black text-[10px] uppercase font-bold">{repo.language}</span>}
-              </div>
-           </div>
+          <div className="text-center">
+            <p className="mono text-xs uppercase tracking-[0.3em] mb-4 text-white/60">Technology Stack</p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {metadata.tags.map(t => (
+                <span key={t} className="px-3 py-1 border border-white/20 text-[10px] uppercase">{t}</span>
+              ))}
+              {repo.language && <span className="px-3 py-1 bg-white text-black text-[10px] uppercase font-bold">{repo.language}</span>}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -90,12 +81,12 @@ const ProjectItem: React.FC<{ repo: GithubRepo; index: number }> = ({ repo, inde
           {metadata.desc}
         </p>
         <div className="flex gap-6 items-center">
-          <a 
-            href={repo.html_url} 
-            target="_blank" 
+          <a
+            href={repo.html_url}
+            target="_blank"
             className="inline-flex items-center gap-4 text-xs font-bold tracking-[0.3em] group/btn"
           >
-            VIEW REPOSITORY 
+            VIEW REPOSITORY
             <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover/btn:bg-white group-hover/btn:text-black transition-all">
               <ArrowUpRight size={16} />
             </div>
@@ -119,7 +110,7 @@ const Projects: React.FC = () => {
     fetchGithubRepos()
       .then(data => {
         const filtered = data.filter(repo => ALLOWED_PROJECTS.includes(repo.name));
-        const sorted = [...filtered].sort((a, b) => 
+        const sorted = [...filtered].sort((a, b) =>
           ALLOWED_PROJECTS.indexOf(a.name) - ALLOWED_PROJECTS.indexOf(b.name)
         );
         setRepos(sorted);
