@@ -36,10 +36,16 @@ const ALLOWED_PROJECTS = [
 
 
 const ProjectItem: React.FC<{ repo: GithubRepo; index: number }> = ({ repo, index }) => {
-  const metadata = PROJECT_METADATA[repo.name] || {
+  // Find metadata by case-insensitive name
+  const metadataKey = Object.keys(PROJECT_METADATA).find(
+    key => key.toLowerCase() === repo.name.toLowerCase()
+  );
+
+  const metadata = (metadataKey ? PROJECT_METADATA[metadataKey] : null) || {
     desc: repo.description || "A technical exploration into the mechanics of digital innovation and architecture.",
     tags: repo.topics || []
   };
+
 
   return (
     <MotionDiv
@@ -109,14 +115,25 @@ const Projects: React.FC = () => {
   useEffect(() => {
     fetchGithubRepos()
       .then(data => {
-        const filtered = data.filter(repo => ALLOWED_PROJECTS.includes(repo.name));
-        const sorted = [...filtered].sort((a, b) =>
-          ALLOWED_PROJECTS.indexOf(a.name) - ALLOWED_PROJECTS.indexOf(b.name)
+        // Case-insensitive filtering to be robust
+        const filtered = data.filter(repo =>
+          ALLOWED_PROJECTS.some(allowed => allowed.toLowerCase() === repo.name.toLowerCase())
         );
+
+        // Sort based on the order in ALLOWED_PROJECTS
+        const sorted = [...filtered].sort((a, b) => {
+          const indexA = ALLOWED_PROJECTS.findIndex(allowed => allowed.toLowerCase() === a.name.toLowerCase());
+          const indexB = ALLOWED_PROJECTS.findIndex(allowed => allowed.toLowerCase() === b.name.toLowerCase());
+          return indexA - indexB;
+        });
+
         setRepos(sorted);
         setLoading(false);
       })
-      .catch(() => setLoading(true));
+      .catch((err) => {
+        console.error("Github fetch error:", err);
+        setLoading(false);
+      });
   }, []);
 
   return (

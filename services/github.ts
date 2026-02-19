@@ -10,9 +10,10 @@ export async function fetchGithubProfile(): Promise<GithubProfile> {
 }
 
 export async function fetchGithubRepos(): Promise<GithubRepo[]> {
-  const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=10`);
+  const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`);
   if (!response.ok) throw new Error('Failed to fetch repos');
   const repos = await response.json();
   // Filter for meaningful repos (those with descriptions or stars usually)
   return repos.filter((repo: GithubRepo) => !repo.name.startsWith('.'));
 }
+
