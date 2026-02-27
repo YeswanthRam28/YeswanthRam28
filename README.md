@@ -101,8 +101,7 @@ I don't wait for qualifications. I learn by shipping.
 
 ---
 
-* Building stacked systems that mix: CV + ML + hybrid LLMs
-* Treating projects as prototypes, making them sharper
+<div class="badge-base LI-profile-badge" data-locale="en_US" data-size="large" data-theme="dark" data-type="HORIZONTAL" data-vanity="yeswanth-ram-jp-053002386" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://in.linkedin.com/in/yeswanth-ram-jp-053002386?trk=profile-badge">Yeswanth Ram JP</a></div>
 
 ---
 
