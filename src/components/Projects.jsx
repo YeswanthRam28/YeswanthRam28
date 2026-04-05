@@ -16,10 +16,10 @@ export default function Projects() {
   }, []);
 
   const projects = [
-    { num: '01', name: 'NeuroSync', tags: ['CV', 'ML', 'LLM'], year: "'26" },
+    { num: '01', name: 'NeuroSync', tags: ['CV', 'ML', 'LLM'], year: "'25" },
     { num: '02', name: 'Hawkeye', tags: ['Vision', 'Security'], year: "'26" },
-    { num: '03', name: 'Zero-Touch', tags: ['Voice', 'Eye-Track'], year: "'24" },
-    { num: '04', name: 'Jarvis', tags: ['Assistant', 'Local AI'], year: "'24" },
+    { num: '03', name: 'Zero-Touch', tags: ['Voice', 'Eye-Track'], year: "'25" },
+    { num: '04', name: 'Jarvis', tags: ['Assistant', 'Local AI'], year: "'26" },
     { num: '05', name: 'Defy', tags: ['Web3', 'MCP'], year: "'26" },
   ];
 
