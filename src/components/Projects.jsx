@@ -16,11 +16,11 @@ export default function Projects() {
   }, []);
 
   const projects = [
-    { num: '01', name: 'NeuroSync', tags: ['CV', 'ML', 'LLM'], year: "'25" },
-    { num: '02', name: 'Hawkeye', tags: ['Vision', 'Security'], year: "'25" },
+    { num: '01', name: 'NeuroSync', tags: ['CV', 'ML', 'LLM'], year: "'26" },
+    { num: '02', name: 'Hawkeye', tags: ['Vision', 'Security'], year: "'26" },
     { num: '03', name: 'Zero-Touch', tags: ['Voice', 'Eye-Track'], year: "'24" },
     { num: '04', name: 'Jarvis', tags: ['Assistant', 'Local AI'], year: "'24" },
-    { num: '05', name: 'Defy', tags: ['Web3', 'MCP'], year: "'25" },
+    { num: '05', name: 'Defy', tags: ['Web3', 'MCP'], year: "'26" },
   ];
 
   return (
@@ -35,7 +35,7 @@ export default function Projects() {
             <h2 className="section-heading" style={{ color: 'var(--white)' }}>What I've Built</h2>
           </div>
           <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '13px', color: 'rgba(245,240,235,0.2)', letterSpacing: '0.2em', fontWeight: 300 }}>
-            2024 — 2025
+            2024 — 2026
           </span>
         </div>
 

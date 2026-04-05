@@ -280,7 +280,7 @@ section {
 .projects-inner {
   position: relative; z-index: 10;
   width: 100%; max-width: 1020px;
-  padding: 0 56px;
+  padding: 120px 56px 60px;
 }
 .projects-header {
   display: flex;
@@ -437,7 +437,7 @@ section {
 .skills-inner {
   position: relative; z-index: 10;
   width: 100%; max-width: 940px;
-  padding: 0 56px;
+  padding: 120px 56px 60px;
 }
 .skills-header { margin-bottom: 56px; }
 .skills-divider {
@@ -608,7 +608,7 @@ footer {
   .about-divider { display: none; }
   .about-right { padding-left: 0; padding-top: 32px; }
   .about-ghost { font-size: 80px; }
-  .projects-inner, .skills-inner, .contact-inner { padding: 0 24px; }
+  .projects-inner, .skills-inner, .contact-inner { padding: 80px 24px 40px; }
   .skills-grid { grid-template-columns: 1fr; gap: 40px; }
   footer { padding: 22px 24px; flex-direction: column; gap: 16px; text-align: center; }
 }
