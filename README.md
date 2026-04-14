@@ -118,10 +118,10 @@ commit 9d4ef02  [WIN]       +2 more victories. Pattern recognition improving.
 commit e4c03f7  [+16 more]  Kept iterating regardless of outcome
                             Each loss = better architecture next time
 
-4 wins / 20+ participations / 0 quits
+5 wins / 20+ participations / 0 quits
 ```
 
-> **4× hackathon winner. 20+ battles.** Win rate not the point — iteration rate is.
+> **5 × hackathon winner. 20+ battles.** Win rate not the point — iteration rate is.
 ---
 
 ## `> stats --realtime`

@@ -1,0 +1,2 @@
+function t(a,e){return{description:"Deliver your courses with impact through a bold, structured LMS template built to showcase content, engage learners, and simplify online education.",favicon:"assets/images/image-bundle-20.png",robots:"max-image-preview:large",socialImage:"assets/images/image-bundle-21.jpg",title:"Didasko - Neobrutalist & SaaS Landing Page"}}export{t as a};
+//# sourceMappingURL=chunk-2CCIMPI3.mjs.map

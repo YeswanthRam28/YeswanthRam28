@@ -1,68 +1,192 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-export default function Skills() {
-  useEffect(() => {
-    const reveals = document.querySelectorAll('#skills .reveal');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) e.target.classList.add('visible');
-      });
-    }, { threshold: 0.12 });
-    reveals.forEach(el => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+const richTextStyle = {
+  outline: 'none',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'flex-start',
+  flexShrink: 0,
+  '--framer-link-text-color': 'rgb(0, 153, 255)',
+  '--framer-link-text-decoration': 'underline',
+  transform: 'none',
+  opacity: 1,
+};
 
+const borderBase = {
+  '--border-bottom-width': '2px',
+  '--border-color': 'var(--token-14825bd6-f9b4-4846-afef-1af0cbf8c065, rgb(0, 0, 0))',
+  '--border-left-width': '2px',
+  '--border-right-width': '2px',
+  '--border-style': 'solid',
+  '--border-top-width': '2px',
+  boxShadow: '8px 8px 0px 0px var(--token-14825bd6-f9b4-4846-afef-1af0cbf8c065, rgb(0, 0, 0))',
+  opacity: 1,
+};
+
+export const Skills = () => {
   return (
-    <section id="skills">
-      <div className="absolute inset-0 z-0" style={{ background: '#F5F0EB' }}></div>
-      <div className="absolute inset-0 z-[1]" style={{ background: 'rgba(245,240,235,0.35)' }}></div>
+    <section className="framer-4fwxaw" data-framer-name="benefits" id="benefits">
+      {/* Background texture */}
+      <div className="framer-m5w5gj-container">
+        <div className="framer-56Ysx framer-fbiaj5 framer-v-fbiaj5" style={{ height: '100%', width: '100%', opacity: 0.5 }}>
+          <div
+            style={{ position: 'absolute', borderRadius: 'inherit', top: 0, right: 0, bottom: 0, left: 0, backgroundImage: 'url(assets/images/default-27.svg)', backgroundRepeat: 'repeat', backgroundPosition: 'center', border: 0, backgroundSize: '187.5px auto' }}
+            data-framer-background-image-wrapper="true"
+          />
+        </div>
+      </div>
 
-      <div className="skills-inner">
-        <div className="skills-header reveal">
-          <span className="section-label">Skills</span>
-          <h2 className="section-heading" style={{ color: 'var(--black)' }}>What I Use</h2>
-          <div className="skills-divider"></div>
+      <div className="framer-o7cb88" data-framer-name="content">
+        {/* Section header */}
+        <div className="framer-yw6p1f" data-framer-name="wrapper">
+          {/* Badge */}
+          <div className="framer-1sb4gyw-container">
+            <div
+              className="framer-QpGIS framer-jVdE7 framer-1lyq2hd framer-v-1lyq2hd"
+              data-border="true"
+              style={{ '--border-bottom-width': '2px', '--border-color': 'var(--token-14825bd6-f9b4-4846-afef-1af0cbf8c065, rgb(0, 0, 0))', '--border-left-width': '2px', '--border-right-width': '2px', '--border-style': 'solid', '--border-top-width': '2px', backgroundColor: 'var(--token-fdcc5b21-a997-46c1-a990-9f9c0159a383, rgb(248, 214, 179))', boxShadow: '4px 4px 0px 0px var(--token-14825bd6-f9b4-4846-afef-1af0cbf8c065, rgb(0, 0, 0))', opacity: 1 }}
+            >
+              <div className="framer-ktx7xz" style={richTextStyle}>
+                <p className="framer-text framer-styles-preset-k0zyfh" data-styles-preset="rhkDaosjl">Skills</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Title + Description */}
+          <div className="framer-144zozj" data-framer-name="wrapper">
+            <div className="framer-1s21ymi" style={{ outline: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', flexShrink: 0, transform: 'none' }}>
+              <h2 className="framer-text framer-styles-preset-1414slq" data-styles-preset="iJ0GIKQvm">Technical Stack Strategy</h2>
+            </div>
+            <div className="framer-rladdc" style={{ outline: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', flexShrink: 0, transform: 'none' }}>
+              <p className="framer-text framer-styles-preset-1wx5uu0" data-styles-preset="yWUJk0B4D">
+                A layered approach to building autonomous and intelligent systems.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className="skills-grid">
-          <div className="reveal reveal-delay-1">
-            <span className="skill-category-label">AI / Machine Learning</span>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li className="skill-item">PyTorch &amp; TensorFlow <span className="skill-dot"></span></li>
-              <li className="skill-item">Computer Vision <span className="skill-dot"></span></li>
-              <li className="skill-item">Natural Language Processing <span className="skill-dot"></span></li>
-              <li className="skill-item">MediaPipe &amp; OpenCV <span className="skill-dot"></span></li>
-            </ul>
+        {/* Cards Grid */}
+        <div className="framer-aj0wc3" data-framer-name="wrapper">
+
+          {/* Row 1: Intelligence Layer (double) + Perception Layer (single) */}
+          <div className="framer-glzgl6" data-framer-name="wrapper">
+            <div className="framer-wc2nip-container">
+              <div className="framer-X6dYR framer-aw2sJ framer-CraGg framer-1f6l56w framer-v-1uq5497" data-border="true" data-framer-name="Double"
+                style={{ ...borderBase, backgroundColor: 'var(--token-df3b0292-9153-4484-b1d6-f7e71cc31198, rgb(253, 253, 150))', height: '100%', width: '100%' }}>
+                <div className="framer-9vsty4" style={{ opacity: 1 }}>
+                  <div className="framer-39127p" style={{ opacity: 1 }}>
+                    <div className="framer-o0077q" style={richTextStyle}>
+                      <h3 className="framer-text framer-styles-preset-1w6sc1n" style={{ '--framer-text-alignment': 'left' }}>Intelligence Layer</h3>
+                    </div>
+                    <div className="framer-utlwrm" style={{ ...richTextStyle, '--extracted-r6o4lv': 'var(--token-14825bd6-f9b4-4846-afef-1af0cbf8c065, rgb(0, 0, 0))' }}>
+                      <p className="framer-text framer-styles-preset-1wx5uu0" style={{ '--framer-text-alignment': 'left', '--framer-text-color': 'var(--extracted-r6o4lv, rgb(0,0,0))' }}>
+                        ML / LLM Orchestration / RAG Pipelines / Agentic Systems — the brain behind every product I build.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="framer-1hmbuwv-container">
+              <div className="framer-X6dYR framer-aw2sJ framer-CraGg framer-1f6l56w framer-v-1f6l56w" data-border="true" data-framer-name="Single"
+                style={{ ...borderBase, backgroundColor: 'var(--token-735d697b-5a03-49fe-9b66-80e6a14713f9, rgb(255, 255, 255))', width: '100%' }}>
+                <div className="framer-9vsty4" style={{ opacity: 1 }}>
+                  <div className="framer-39127p" style={{ opacity: 1 }}>
+                    <div className="framer-o0077q" style={richTextStyle}>
+                      <h3 className="framer-text framer-styles-preset-1w6sc1n" style={{ '--framer-text-alignment': 'left' }}>Perception Layer</h3>
+                    </div>
+                    <div className="framer-utlwrm" style={richTextStyle}>
+                      <p className="framer-text framer-styles-preset-1wx5uu0" style={{ '--framer-text-alignment': 'left' }}>
+                        Computer Vision (OpenCV) / MediaPipe (Face & Pose) / Real-Time Inference.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="reveal reveal-delay-2">
-            <span className="skill-category-label">LLM Systems</span>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li className="skill-item">Local LLM Deployment <span className="skill-dot"></span></li>
-              <li className="skill-item">Hybrid AI Pipelines <span className="skill-dot"></span></li>
-              <li className="skill-item">Gemma &amp; Ollama <span className="skill-dot"></span></li>
-            </ul>
+          {/* Row 2: Rapid Prototyping (single) + Engineering Layer (double) */}
+          <div className="framer-5bbhxl" data-framer-name="wrapper">
+            <div className="framer-8gkxpc-container">
+              <div className="framer-X6dYR framer-aw2sJ framer-CraGg framer-1f6l56w framer-v-1f6l56w" data-border="true" data-framer-name="Single"
+                style={{ ...borderBase, backgroundColor: 'var(--token-735d697b-5a03-49fe-9b66-80e6a14713f9, rgb(255, 255, 255))', width: '100%' }}>
+                <div className="framer-9vsty4" style={{ opacity: 1 }}>
+                  <div className="framer-39127p" style={{ opacity: 1 }}>
+                    <div className="framer-o0077q" style={richTextStyle}>
+                      <h3 className="framer-text framer-styles-preset-1w6sc1n" style={{ '--framer-text-alignment': 'left' }}>Rapid Prototyping</h3>
+                    </div>
+                    <div className="framer-utlwrm" style={richTextStyle}>
+                      <p className="framer-text framer-styles-preset-1wx5uu0" style={{ '--framer-text-alignment': 'left' }}>
+                        Ship fast, break it, rebuild sharper — from concept to demo in hours.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="framer-1ipu3qq-container">
+              <div className="framer-X6dYR framer-aw2sJ framer-CraGg framer-1f6l56w framer-v-1uq5497" data-border="true" data-framer-name="Double"
+                style={{ ...borderBase, backgroundColor: 'var(--token-353de080-56da-4189-9321-c69d0ed1b3ed, rgb(218, 245, 240))', height: '100%', width: '100%' }}>
+                <div className="framer-9vsty4" style={{ opacity: 1 }}>
+                  <div className="framer-39127p" style={{ opacity: 1 }}>
+                    <div className="framer-o0077q" style={richTextStyle}>
+                      <h3 className="framer-text framer-styles-preset-1w6sc1n" style={{ '--framer-text-alignment': 'left' }}>Engineering Layer</h3>
+                    </div>
+                    <div className="framer-utlwrm" style={{ ...richTextStyle, '--extracted-r6o4lv': 'var(--token-14825bd6-f9b4-4846-afef-1af0cbf8c065, rgb(0, 0, 0))' }}>
+                      <p className="framer-text framer-styles-preset-1wx5uu0" style={{ '--framer-text-alignment': 'left', '--framer-text-color': 'var(--extracted-r6o4lv, rgb(0,0,0))' }}>
+                        FastAPI + React / Docker & Linux / PostgreSQL & Neon DB — the stack that holds it all together.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="reveal reveal-delay-3">
-            <span className="skill-category-label">Web Development</span>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li className="skill-item">React / Next.js <span className="skill-dot"></span></li>
-              <li className="skill-item">FastAPI &amp; Python <span className="skill-dot"></span></li>
-              <li className="skill-item">Firebase &amp; Docker <span className="skill-dot"></span></li>
-            </ul>
+          {/* Row 3: Languages & Tools (double) + Problem Solving (single) */}
+          <div className="framer-1c1a07a" data-framer-name="wrapper">
+            <div className="framer-ajuz85-container">
+              <div className="framer-X6dYR framer-aw2sJ framer-CraGg framer-1f6l56w framer-v-1uq5497" data-border="true" data-framer-name="Double"
+                style={{ ...borderBase, backgroundColor: 'var(--token-fdcc5b21-a997-46c1-a990-9f9c0159a383, rgb(248, 214, 179))', height: '100%', width: '100%' }}>
+                <div className="framer-9vsty4" style={{ opacity: 1 }}>
+                  <div className="framer-39127p" style={{ opacity: 1 }}>
+                    <div className="framer-o0077q" style={richTextStyle}>
+                      <h3 className="framer-text framer-styles-preset-1w6sc1n" style={{ '--framer-text-alignment': 'left' }}>Languages & Tools</h3>
+                    </div>
+                    <div className="framer-utlwrm" style={{ ...richTextStyle, '--extracted-r6o4lv': 'var(--token-14825bd6-f9b4-4846-afef-1af0cbf8c065, rgb(0, 0, 0))' }}>
+                      <p className="framer-text framer-styles-preset-1wx5uu0" style={{ '--framer-text-alignment': 'left', '--framer-text-color': 'var(--extracted-r6o4lv, rgb(0,0,0))' }}>
+                        Python / JavaScript / TypeScript / Git / Jupyter / HuggingFace — the palette I paint with.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="framer-47cv4b-container">
+              <div className="framer-X6dYR framer-aw2sJ framer-CraGg framer-1f6l56w framer-v-1f6l56w" data-border="true" data-framer-name="Single"
+                style={{ ...borderBase, backgroundColor: 'var(--token-735d697b-5a03-49fe-9b66-80e6a14713f9, rgb(255, 255, 255))', width: '100%' }}>
+                <div className="framer-9vsty4" style={{ opacity: 1 }}>
+                  <div className="framer-39127p" style={{ opacity: 1 }}>
+                    <div className="framer-o0077q" style={richTextStyle}>
+                      <h3 className="framer-text framer-styles-preset-1w6sc1n" style={{ '--framer-text-alignment': 'left' }}>Problem Solving</h3>
+                    </div>
+                    <div className="framer-utlwrm" style={richTextStyle}>
+                      <p className="framer-text framer-styles-preset-1wx5uu0" style={{ '--framer-text-alignment': 'left' }}>
+                        I break problems down to first principles and build back up with clarity and speed.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="reveal reveal-delay-4">
-            <span className="skill-category-label">Core Foundations</span>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li className="skill-item">Algorithms &amp; Data Structures <span className="skill-dot"></span></li>
-              <li className="skill-item">Linux &amp; Systems <span className="skill-dot"></span></li>
-              <li className="skill-item">Java &amp; Python <span className="skill-dot"></span></li>
-            </ul>
-          </div>
         </div>
       </div>
     </section>
   );
-}
+};
