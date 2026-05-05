@@ -51,7 +51,7 @@ export const Header = () => {
                   className="framer-ahKho framer-liyJC framer-1jbeif5 framer-v-1jbeif5 framer-1jnr733"
                   data-framer-name="Default"
                   style={{ opacity: 1 }}
-                  href="./#benefits"
+                  href="#benefits"
                 >
                   <div
                     className="framer-xny2sl"
@@ -71,7 +71,7 @@ export const Header = () => {
                   className="framer-ahKho framer-liyJC framer-1jbeif5 framer-v-1jbeif5 framer-1jnr733"
                   data-framer-name="Default"
                   style={{ opacity: 1 }}
-                  href="./#how-it-work-1"
+                  href="#projects"
                 >
                   <div
                     className="framer-xny2sl"
@@ -92,7 +92,7 @@ export const Header = () => {
                   data-border="true"
                   data-framer-name="Solid"
                   style={{ '--border-bottom-width': '2px', '--border-color': 'var(--token-14825bd6-f9b4-4846-afef-1af0cbf8c065, rgb(0, 0, 0))', '--border-left-width': '2px', '--border-right-width': '2px', '--border-style': 'solid', '--border-top-width': '2px', backgroundColor: 'var(--token-10bc40bb-604b-41d4-b321-4b409afa6a9f, rgb(255, 219, 88))', boxShadow: '4px 4px 0px 0px var(--token-14825bd6-f9b4-4846-afef-1af0cbf8c065, rgb(0, 0, 0))', opacity: 1 }}
-                  href="./#newsletter"
+                  href="#newsletter"
                 >
                   <div
                     className="framer-1c74ag0"
