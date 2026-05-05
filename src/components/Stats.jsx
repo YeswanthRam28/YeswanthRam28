@@ -47,7 +47,7 @@ const XIcon = () => (
 
 export const Stats = () => {
   return (
-    <section className="framer-ljowmk" data-framer-name="problem" id="problem">
+    <section className="framer-ljowmk" data-framer-name="problem" id="stats">
       {/* Background texture */}
       <div className="framer-gfqefc-container">
         <div

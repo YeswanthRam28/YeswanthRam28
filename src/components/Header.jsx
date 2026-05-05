@@ -51,7 +51,7 @@ export const Header = () => {
                   className="framer-ahKho framer-liyJC framer-1jbeif5 framer-v-1jbeif5 framer-1jnr733"
                   data-framer-name="Default"
                   style={{ opacity: 1 }}
-                  href="#benefits"
+                  href="#stats"
                 >
                   <div
                     className="framer-xny2sl"
@@ -59,7 +59,7 @@ export const Header = () => {
                     data-framer-component-type="RichTextContainer"
                   >
                     <p className="framer-text framer-styles-preset-1m9leq1" data-styles-preset="ZxQb0MZiY" style={{ '--framer-text-color': 'var(--extracted-r6o4lv, var(--token-14825bd6-f9b4-4846-afef-1af0cbf8c065, rgb(0, 0, 0)))' }}>
-                      Skills
+                      Stats
                     </p>
                   </div>
                 </a>
