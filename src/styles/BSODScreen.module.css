@@ -1,0 +1,66 @@
+.glitchContainer {
+  position: absolute;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: 999;
+  pointer-events: none;
+  animation: stutter 400ms steps(5) infinite;
+}
+
+@keyframes stutter {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(6px); }
+  100% { transform: translateX(0); }
+}
+
+.scanline {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(255,255,255,0.15);
+  animation: flicker 80ms infinite alternate;
+}
+
+@keyframes flicker {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.blackScreen {
+  position: absolute;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: #000000;
+  z-index: 1000;
+}
+
+.bsodContainer {
+  position: absolute;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: #0000AA;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  width: 80%;
+  max-width: 800px;
+  color: #FFFFFF;
+  font-family: var(--font-mono); /* Or Consolas */
+  font-size: 14px;
+  line-height: 2;
+}
+
+.sadFace {
+  font-family: var(--font-display);
+  font-size: 80px;
+  margin-bottom: 24px;
+}
+
+.content p {
+  margin-bottom: 24px;
+}

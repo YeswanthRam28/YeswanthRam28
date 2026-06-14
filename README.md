@@ -122,6 +122,7 @@ commit e4c03f7  [+16 more]  Kept iterating regardless of outcome
 ```
 
 > **5 × hackathon winner. 20+ battles.** Win rate not the point — iteration rate is.
+
 ---
 
 ## `> stats --realtime`
