@@ -80,13 +80,7 @@ export default function SocialsPanel() {
               <a 
                 key={i} 
                 href={node.url} 
-                target="_blank"
-                rel="noopener noreferrer" 
                 title={node.title || node.slug} 
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.open(node.url, '_blank');
-                }}
               >
                 <img 
                   src={node.iconUrl || `https://cdn.simpleicons.org/${node.slug}/${node.color}`} 
