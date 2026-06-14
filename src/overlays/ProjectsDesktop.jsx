@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useSceneStore from '../store/useSceneStore';
 import styles from '../styles/ProjectsDesktop.module.css';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
+
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -13,9 +12,10 @@ export default function ProjectsDesktop() {
   const activeSection = useSceneStore(state => state.activeSection);
   const setActiveSection = useSceneStore(state => state.setActiveSection);
   const setBsodActive = useSceneStore(state => state.setBsodActive);
-  
+
   const [time, setTime] = useState(new Date().toLocaleTimeString());
-  const [expandedProject, setExpandedProject] = useState(null);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     if (activeSection !== 'PROJECTS') return;
@@ -24,12 +24,15 @@ export default function ProjectsDesktop() {
   }, [activeSection]);
 
   const projects = [
-    { name: 'JARVIS', color: '#ff5555', tags: ['React', 'Node'], year: '2025' },
-    { name: 'FRIDAY', color: '#55ff55', tags: ['Python', 'AI'], year: '2024' },
-    { name: 'AcadTrace', color: '#5555ff', tags: ['Next.js', 'Postgres'], year: '2024' },
-    { name: 'COGNIA', color: '#ffff55', tags: ['WebGL', 'Three.js'], year: '2025' },
-    { name: 'TerraGuard', color: '#55ffff', tags: ['Go', 'Docker'], year: '2023' },
-    { name: 'TRAYM', color: '#ff55ff', tags: ['Vue', 'Firebase'], year: '2024' },
+    { name: 'JARVIS', desc: 'PC-side personal AI agent. Watches your screen. Reads your context. Acts. MCP-native.', link: 'https://github.com/YeswanthRam28/Jarvis' },
+    { name: 'FRIDAY', desc: 'Android twin to JARVIS. AccessibilityService executor. Firebase blackboard.', link: 'https://github.com/YeswanthRam28/Friday' },
+    { name: 'TRAYM', desc: 'Gym tracker with AI coaching layer. pgvector memory. Gemini 2.0 Flash brain.', link: 'https://github.com/YeswanthRam28/TRAYM' },
+    { name: 'NeuroSync', desc: 'Real-time cognitive awareness: CV + ML + LLMs running in a loop.', link: 'https://github.com/YeswanthRam28/NeuroSync' },
+    { name: 'TerraGuard', desc: 'Illegal sand mining detection over Tamil Nadu rivers. YOLOv8 + ESP32 + IoT. National finalist.', link: 'https://github.com/YeswanthRam28' },
+    { name: 'Hawkeye', desc: 'Multimodal AI security system. Sees. Thinks. Alerts.', link: 'https://github.com/YeswanthRam28/Hawkeye' },
+    { name: 'Zero-Touch', desc: 'Navigate a machine using only your voice and eyes. MediaPipe + Speech.', link: 'https://github.com/YeswanthRam28/Zero-touch' },
+    { name: 'OmniOS', desc: 'Autonomous Android screen agent. VLM sees pixels. Gemini decides.', link: 'https://github.com/YeswanthRam28/OmniOS' },
+    { name: 'COGNIA', desc: 'Privacy-first campus wellness. Passive sensing. On-device hashing. 2nd place Solve-A-Thon \'26.', link: 'https://github.com/YeswanthRam28/Cognia' },
   ];
 
   const handleExit = () => {
@@ -46,10 +49,14 @@ export default function ProjectsDesktop() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const handleMouseMove = (e) => {
+    setMousePos({ x: e.clientX, y: e.clientY });
+  };
+
   if (activeSection !== 'PROJECTS') return null;
 
   return (
-    <div className={styles.desktopContainer}>
+    <div className={styles.desktopContainer} onMouseMove={handleMouseMove}>
       <div className={styles.topBar}>
         <div className={styles.windowControls}>
           <div className={styles.dot} style={{ backgroundColor: '#ff5f56' }}></div>
@@ -65,40 +72,38 @@ export default function ProjectsDesktop() {
       </button>
 
       <div className={styles.mainArea}>
-        <Swiper
-          effect={'coverflow'}
-          grabCursor={true}
-          centeredSlides={true}
-          slidesPerView={'auto'}
-          coverflowEffect={{
-            rotate: 45,
-            stretch: 0,
-            depth: 200,
-            modifier: 1,
-            slideShadows: true,
-          }}
-          pagination={{ clickable: true }}
-          modules={[EffectCoverflow, Pagination, Navigation]}
-          style={{ width: '100%', padding: '60px 0' }}
-        >
-          {projects.map((proj, i) => (
-            <SwiperSlide key={i} style={{ width: '300px', height: '400px' }}>
-              <div 
-                className={styles.card} 
-                onClick={() => setExpandedProject(proj)}
-                style={{ width: "100%", height: "100%", margin: 0, cursor: 'pointer' }}
+        <div className={styles.galleryContainer}>
+          {projects.map((proj, idx) => {
+            const isHovered = hoveredIndex === idx;
+            const isAnyHovered = hoveredIndex !== null;
+            const isDimmed = isAnyHovered && !isHovered;
+
+            return (
+              <a
+                key={proj.name}
+                href={proj.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.galleryItem}
+                onMouseEnter={() => setHoveredIndex(idx)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                style={{
+                  opacity: isDimmed ? 0.3 : 1,
+                  transform: isHovered ? 'scale(1.05) skewY(-2deg)' : 'scale(1) skewY(0deg)',
+                }}
               >
-                <div className={styles.cardTopBar} style={{ backgroundColor: proj.color }}></div>
-                <div className={styles.cardIcon} style={{ backgroundColor: proj.color }}></div>
-                <div className={styles.cardName} style={{ marginTop: '40px', fontSize: '32px' }}>{proj.name}</div>
-                <div className={styles.cardTags} style={{ marginTop: '20px' }}>
-                  {proj.tags.map(t => <span key={t} className={styles.tag} style={{ fontSize: '14px', padding: '6px 10px' }}>{t}</span>)}
-                </div>
-                <div className={styles.cardYear} style={{ marginTop: 'auto', fontSize: '16px' }}>{proj.year}</div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+                <div className={styles.galleryTitle}>{proj.name}</div>
+              </a>
+            );
+          })}
+        </div>
+
+        <div 
+          className={`${styles.floatingDesc} ${hoveredIndex !== null ? styles.visible : ''}`}
+          style={{ left: mousePos.x + 20, top: mousePos.y + 20, transform: 'none' }}
+        >
+          {hoveredIndex !== null && projects[hoveredIndex].desc}
+        </div>
       </div>
 
       <div className={styles.bottomBar}>
@@ -106,24 +111,6 @@ export default function ProjectsDesktop() {
         <div className={styles.statusRight} onClick={handleExit}>ESC to exit</div>
       </div>
 
-      {expandedProject && (
-        <div className={styles.expandedOverlay} onClick={() => setExpandedProject(null)}>
-          <div className={styles.expandedCard} onClick={e => e.stopPropagation()}>
-            <div className={styles.closeBtn} onClick={() => setExpandedProject(null)}>×</div>
-            <div className={styles.expName}>{expandedProject.name}</div>
-            <div className={styles.expDesc}>
-              A detailed description of the {expandedProject.name} project goes here. It was built using the specified tech stack and solves many interesting problems.
-            </div>
-            <div className={styles.expTags}>
-               {expandedProject.tags.map(t => <span key={t} className={styles.tag}>{t}</span>)}
-            </div>
-            <div className={styles.expLinks}>
-              <a href="#">[ GitHub ]</a>
-              <a href="#">[ Live ]</a>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

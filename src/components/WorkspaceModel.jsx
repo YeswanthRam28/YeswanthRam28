@@ -5,9 +5,31 @@ import useSceneStore from '../store/useSceneStore';
 import * as THREE from 'three';
 import gsap from 'gsap';
 
+function Tooltip({ node, text, yOffset = 10 }) {
+  const [pos, setPos] = React.useState([0, 0, 0]);
+  
+  React.useEffect(() => {
+    if (node) {
+      const box = new THREE.Box3().setFromObject(node);
+      const center = new THREE.Vector3();
+      box.getCenter(center);
+      setPos([center.x, box.max.y + yOffset, center.z]);
+    }
+  }, [node, yOffset]);
+
+  if (!node) return null;
+  return (
+    <Html position={pos} center style={{ pointerEvents: 'none', zIndex: 1000 }}>
+      <div style={{ background: 'rgba(0,0,0,0.8)', border: '1px solid #D4FF00', color: '#D4FF00', fontFamily: 'Space Mono', fontSize: '12px', padding: '6px 12px', borderRadius: '4px', whiteSpace: 'nowrap', boxShadow: '0 0 10px rgba(212,255,0,0.2)' }}>
+        {text}
+      </div>
+    </Html>
+  );
+}
+
 export function WorkspaceModel(props) {
   const { scene, nodes, materials } = useGLTF('/workspace.glb');
-  const dinoTexture = useTexture('/chrome-dino-olympics.avif');
+  const dinoTexture = useTexture('/wp10154671.jpg');
   const { camera } = useThree();
 
   const setHoveredObject = useSceneStore(state => state.setHoveredObject);
@@ -73,10 +95,8 @@ export function WorkspaceModel(props) {
     }
 
     // Apply new background to the monitor screen robustly
-    dinoTexture.flipY = false;
+    dinoTexture.flipY = true;
     dinoTexture.colorSpace = THREE.SRGBColorSpace;
-    dinoTexture.center.set(0.5, 0.5);
-    dinoTexture.rotation = Math.PI; // Rotate 180 degrees to fix inversion
     dinoTexture.needsUpdate = true;
 
     scene.traverse((child) => {
@@ -267,32 +287,16 @@ export function WorkspaceModel(props) {
 
       {/* Tooltips */}
       {nodes.cup && activeSection === 'HOME' && hoveredObject === 'cup' && (
-        <Html position={[nodes.cup.position.x, nodes.cup.position.y + 20, nodes.cup.position.z]} center style={{ pointerEvents: 'none' }}>
-          <div style={{ background: 'rgba(0,0,0,0.8)', border: '1px solid #D4FF00', color: '#D4FF00', fontFamily: 'Space Mono', fontSize: '12px', padding: '6px 12px', borderRadius: '4px', whiteSpace: 'nowrap', boxShadow: '0 0 10px rgba(212,255,0,0.2)' }}>
-            about me
-          </div>
-        </Html>
+        <Tooltip node={nodes.cup} text="about me" yOffset={15} />
       )}
       {nodes.book && activeSection === 'HOME' && hoveredObject === 'book' && (
-        <Html position={[nodes.book.position.x, nodes.book.position.y + 15, nodes.book.position.z]} center style={{ pointerEvents: 'none' }}>
-          <div style={{ background: 'rgba(0,0,0,0.8)', border: '1px solid #D4FF00', color: '#D4FF00', fontFamily: 'Space Mono', fontSize: '12px', padding: '6px 12px', borderRadius: '4px', whiteSpace: 'nowrap', boxShadow: '0 0 10px rgba(212,255,0,0.2)' }}>
-            experience
-          </div>
-        </Html>
+        <Tooltip node={nodes.book} text="experience" yOffset={10} />
       )}
       {phoneNode && activeSection === 'HOME' && useSceneStore.getState().isLoaded !== false && hoveredObject === 'phone' && (
-        <Html position={[phoneNode.position.x, phoneNode.position.y + 15, phoneNode.position.z]} center style={{ pointerEvents: 'none' }}>
-          <div style={{ background: 'rgba(0,0,0,0.8)', border: '1px solid #D4FF00', color: '#D4FF00', fontFamily: 'Space Mono', fontSize: '12px', padding: '6px 12px', borderRadius: '4px', whiteSpace: 'nowrap', boxShadow: '0 0 10px rgba(212,255,0,0.2)' }}>
-            contacts
-          </div>
-        </Html>
+        <Tooltip node={phoneNode} text="contacts" yOffset={10} />
       )}
       {nodes.PC && activeSection === 'HOME' && hoveredObject === 'screen' && (
-        <Html position={[nodes.PC.position.x, nodes.PC.position.y + 130, nodes.PC.position.z]} center style={{ pointerEvents: 'none' }}>
-          <div style={{ background: 'rgba(0,0,0,0.8)', border: '1px solid #D4FF00', color: '#D4FF00', fontFamily: 'Space Mono', fontSize: '12px', padding: '6px 12px', borderRadius: '4px', whiteSpace: 'nowrap', boxShadow: '0 0 10px rgba(212,255,0,0.2)' }}>
-            projects
-          </div>
-        </Html>
+        <Tooltip node={nodes.PC} text="projects" yOffset={25} />
       )}
     </group>
   );

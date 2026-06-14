@@ -86,19 +86,26 @@ export default function BSODScreen() {
   return (
     <div className={styles.bsodContainer}>
       <div className={styles.content}>
-        <div className={styles.sadFace}>:( </div>
-        
-        <p>PORTFOLIO.EXE stopped working</p>
-        
-        <p>A bug has been detected and your reality has been shut down to prevent<br/>damage to the developer's ego.</p>
-        
-        <p>For more information about this issue and possible fixes, ask me.</p>
-        
-        <p>Error: TOO_MANY_PROJECTS (0x0000D4FF)</p>
-        
-        <p>[ 100% complete ]</p>
-        
-        <p>Restarting in {countdown}...</p>
+        <p>REALITY.EXE terminated by PORTFOLIO.EXE</p>
+        <br/>
+        <p>
+          You weren't supposed to see this.<br/>
+          The developer is still adding one more thing.<br/>
+          The designer (also the developer) is arguing with himself.<br/>
+          The developer is losing.
+        </p>
+        <br/>
+        <p>
+          Last commit message: "fix"<br/>
+          Second to last:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"fix2"<br/>
+          Third to last:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ok THIS is the fix"
+        </p>
+        <br/>
+        <p>Error: TOO_MUCH_VISION_NOT_ENOUGH_SLEEP (0x4AMF1X)</p>
+        <br/>
+        <p>[ Building something that slaps... ]</p>
+        <br/>
+        <p>Restarting in {countdown}... unless he pushes another hotfix ]</p>
       </div>
     </div>
   );

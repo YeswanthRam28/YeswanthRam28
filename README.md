@@ -41,6 +41,10 @@ class YeswanthRam:
 
 > A student builder who treats GitHub as a training arena. I don't build demos — I build systems. The kind that watch, reason, and act.
 
+<div align="center">
+  <img src="sanji.gif" width="250" style="border-radius: 8px;" />
+</div>
+
 ---
 
 ## `> skill_tree --list`

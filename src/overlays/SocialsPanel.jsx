@@ -4,17 +4,14 @@ import styles from '../styles/ContactForm.module.css';
 import { Cloud } from 'react-icon-cloud';
 
 const socialLinks = [
-  { slug: 'github', url: 'https://github.com/yourusername', color: 'ffffff' },
-  { slug: 'linkedin', url: 'https://linkedin.com/in/yourusername', color: '0077B5' },
-  { slug: 'discord', url: 'https://discord.com/users/yourid', color: '5865F2' },
-  { slug: 'reddit', url: 'https://reddit.com/user/yourusername', color: 'FF4500' },
-  { slug: 'gmail', url: 'mailto:your.email@gmail.com', color: 'EA4335' },
-  { slug: 'x', url: 'https://twitter.com/yourusername', color: 'ffffff' },
-  { slug: 'instagram', url: 'https://instagram.com/yourusername', color: 'E4405F' },
-  { slug: 'youtube', url: 'https://youtube.com/c/yourusername', color: 'FF0000' },
-  { slug: 'twitch', url: 'https://twitch.tv/yourusername', color: '9146FF' },
-  { slug: 'behance', url: 'https://behance.net/yourusername', color: '1769FF' },
-  { slug: 'dribbble', url: 'https://dribbble.com/yourusername', color: 'EA4C89' }
+  { slug: 'github', url: 'https://github.com/YeswanthRam28', color: 'ffffff', title: 'GitHub' },
+  { slug: 'discord', url: 'https://discord.com', color: '5865F2', title: 'Discord: yeswanth_ram' },
+  { slug: 'gmail', url: 'mailto:yeswanthram.2007@gmail.com', color: 'EA4335', title: 'Email: yeswanthram.2007@gmail.com' },
+  { slug: 'reddit', url: 'https://www.reddit.com/user/ofroa/', color: 'FF4500', title: 'Reddit' },
+  { slug: 'x', url: 'https://x.com/_Yeswanth_Ram_', color: 'ffffff', title: 'X (Twitter)' },
+  { slug: 'instagram', url: 'https://www.instagram.com/yeswanthram28/', color: 'E4405F', title: 'Instagram' },
+  { slug: 'whatsapp', url: 'https://wa.me/916383744523', color: '25D366', title: 'WhatsApp: 6383744523' },
+  { slug: 'linkedin', url: 'https://www.linkedin.com/in/yeswanth-ram-jp/', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg', title: 'LinkedIn' }
 ];
 
 export default function SocialsPanel() {
@@ -86,10 +83,10 @@ export default function SocialsPanel() {
                 href={node.url} 
                 target="_blank"
                 rel="noopener noreferrer" 
-                title={node.slug} 
+                title={node.title || node.slug} 
               >
                 <img 
-                  src={`https://cdn.simpleicons.org/${node.slug}/${node.color}`} 
+                  src={node.iconUrl || `https://cdn.simpleicons.org/${node.slug}/${node.color}`} 
                   alt={node.slug} 
                   height="120" 
                   width="120" 

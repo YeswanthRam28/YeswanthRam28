@@ -39,7 +39,7 @@
 .bsodContainer {
   position: absolute;
   top: 0; left: 0; width: 100vw; height: 100vh;
-  background: #0000AA;
+  background: #000000;
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -62,5 +62,5 @@
 }
 
 .content p {
-  margin-bottom: 24px;
+  margin: 0;
 }
