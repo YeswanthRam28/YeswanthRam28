@@ -63,7 +63,6 @@ export default function SocialsPanel() {
         <div style={{ width: '100vw', height: '100vh', cursor: 'crosshair', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Cloud
             options={{
-              clickToFront: 500,
               depth: 1,
               imageScale: 2,
               initial: [0.1, -0.1],
@@ -84,6 +83,10 @@ export default function SocialsPanel() {
                 target="_blank"
                 rel="noopener noreferrer" 
                 title={node.title || node.slug} 
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open(node.url, '_blank');
+                }}
               >
                 <img 
                   src={node.iconUrl || `https://cdn.simpleicons.org/${node.slug}/${node.color}`} 
