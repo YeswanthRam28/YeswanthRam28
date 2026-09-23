@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Stars, Html } from '@react-three/drei';
+import { OrbitControls, Html, Environment } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette, ChromaticAberration, Outline } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
 import * as THREE from 'three';
@@ -8,52 +8,30 @@ import gsap from 'gsap';
 
 import { WorkspaceModel } from './WorkspaceModel';
 import useSceneStore from '../store/useSceneStore';
-import SteamParticles from './SteamParticles';
-import ScreenTexture from './ScreenTexture';
 
 function CameraController() {
   const { camera } = useThree();
   const activeSection = useSceneStore(state => state.activeSection);
   const controlsRef = useRef();
 
-  // Initial setup
+  // Initial setup — match the premium centered view
   useEffect(() => {
-    camera.position.set(0, 800, 0); // start bird's eye
-    camera.fov = 45;
+    camera.position.set(0, 180, 380);
+    camera.fov = 60;
     camera.updateProjectionMatrix();
-
-    // Intro animation
-    gsap.to(camera.position, {
-      x: 250, y: 120, z: 400,
-      duration: 2,
-      ease: "power3.out",
-      delay: 1.1
-    });
-
-    // Look at target interpolation
-    const dummy = { x: 0, y: 0, z: 0 };
-    gsap.to(dummy, {
-      y: 90,
-      duration: 2,
-      ease: "power3.out",
-      delay: 1.1,
-      onUpdate: () => {
-        if (controlsRef.current) {
-           controlsRef.current.target.set(dummy.x, dummy.y, dummy.z);
-        }
-        camera.lookAt(dummy.x, dummy.y, dummy.z);
-      }
-    });
-
+    if (controlsRef.current) {
+      controlsRef.current.target.set(0, 40, 0);
+    }
+    camera.lookAt(0, 40, 0);
   }, [camera]);
 
   // Handle section transitions
   useEffect(() => {
     if (activeSection === 'HOME') {
-      // Return to center
-      gsap.to(camera.position, { x: 250, y: 150, z: 450, duration: 1.0, ease: "power2.inOut" });
-      gsap.to(camera, { fov: 45, duration: 1.0, onUpdate: () => camera.updateProjectionMatrix() });
-      if (controlsRef.current) gsap.to(controlsRef.current.target, { x: 0, y: 90, z: 0, duration: 1.0, ease: "power2.inOut" });
+      // Return to the centered premium view
+      gsap.to(camera.position, { x: 0, y: 180, z: 380, duration: 1.0, ease: "power2.inOut" });
+      gsap.to(camera, { fov: 60, duration: 1.0, onUpdate: () => camera.updateProjectionMatrix() });
+      if (controlsRef.current) gsap.to(controlsRef.current.target, { x: 0, y: 40, z: 0, duration: 1.0, ease: "power2.inOut" });
     } else if (activeSection === 'PROJECTS' || (activeSection === 'TRANSITION' && useSceneStore.getState().hoveredObject === 'screen')) {
       gsap.to(camera.position, { x: -30, y: 85, z: 120, duration: 1.8, ease: "power4.in" });
       gsap.to(camera, { fov: 30, duration: 1.8, ease: "power4.in", onUpdate: () => camera.updateProjectionMatrix() });
@@ -68,13 +46,16 @@ function CameraController() {
   return (
     <OrbitControls 
       ref={controlsRef}
-      target={[0, 90, 0]}
-      minDistance={200}
-      maxDistance={700}
-      maxPolarAngle={Math.PI / 2.2}
-      enablePan={false}
+      target={[0, 40, 0]}
+      minDistance={100}
+      maxDistance={600}
+      minPolarAngle={0.1}
+      maxPolarAngle={Math.PI / 2.1}
+      enablePan={true}
+      panSpeed={1.2}
+      screenSpacePanning={true}
       autoRotate={false}
-      enabled={activeSection === 'HOME'} // Lock controls during transitions or when in sections
+      enabled={activeSection === 'HOME'}
     />
   );
 }
@@ -86,7 +67,7 @@ export default function Scene() {
     <div style={{ width: '100vw', height: '100vh', position: 'absolute', top: 0, left: 0 }}>
       <Canvas 
         shadows 
-        camera={{ position: [0, 8, 0], fov: 45 }}
+        camera={{ position: [0, 180, 380], fov: 60 }}
         onPointerMissed={() => {
           if (useSceneStore.getState().activeSection !== 'HOME' && useSceneStore.getState().activeSection !== 'TRANSITION') {
             useSceneStore.getState().setActiveSection('HOME');
@@ -94,18 +75,16 @@ export default function Scene() {
         }}
       >
         
-        {/* Scene Lighting */}
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[-500, 500, -500]} intensity={1.2} castShadow />
-        <pointLight position={[0, 50, 0]} color="#ff9944" intensity={0.6} />
-        <pointLight position={[0, 150, -100]} color="#4488ff" intensity={0.8} distance={300} />
+        {/* Scene Lighting - tuned to match the warm workspace look */}
+        <ambientLight intensity={0.7} color="#fff8f0" />
+        <directionalLight position={[200, 500, 200]} intensity={1.0} castShadow color="#fff8f0" />
+        <directionalLight position={[-200, 300, -200]} intensity={0.4} color="#e8d5b0" />
+        <pointLight position={[0, 200, 0]} color="#ffddaa" intensity={0.5} distance={600} />
+        <Environment preset="apartment" background={false} environmentIntensity={0.4} />
 
-        <Stars radius={200} depth={100} count={5000} factor={6} saturation={0} fade speed={1.5} />
 
         <CameraController />
         <WorkspaceModel />
-        <SteamParticles />
-        <ScreenTexture />
 
         <EffectComposer disableNormalPass>
           <Bloom luminanceThreshold={0.85} luminanceSmoothing={0.9} height={300} opacity={0.4} />

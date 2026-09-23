@@ -5,30 +5,38 @@ import useSceneStore from '../store/useSceneStore';
 import * as THREE from 'three';
 import gsap from 'gsap';
 
-function Tooltip({ node, text, yOffset = 10 }) {
-  const [pos, setPos] = React.useState([0, 0, 0]);
-  
-  React.useEffect(() => {
-    if (node) {
-      const box = new THREE.Box3().setFromObject(node);
-      const center = new THREE.Vector3();
-      box.getCenter(center);
-      setPos([center.x, box.max.y + yOffset, center.z]);
-    }
-  }, [node, yOffset]);
+const pulseKeyframes = `
+  @keyframes pulseRing {
+    0%   { transform: scale(1);   opacity: 0.7; }
+    50%  { transform: scale(1.5); opacity: 0.2; }
+    100% { transform: scale(1);   opacity: 0.7; }
+  }
+  @keyframes floatDot {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-4px); }
+  }
+`;
 
-  if (!node) return null;
+function InteractHint({ position, label, isHovered }) {
+  if (!position) return null;
   return (
-    <Html position={pos} center style={{ pointerEvents: 'none', zIndex: 1000 }}>
-      <div style={{ background: 'rgba(0,0,0,0.8)', border: '1px solid #D4FF00', color: '#D4FF00', fontFamily: 'Space Mono', fontSize: '12px', padding: '6px 12px', borderRadius: '4px', whiteSpace: 'nowrap', boxShadow: '0 0 10px rgba(212,255,0,0.2)' }}>
-        {text}
+    <Html position={position} center style={{ pointerEvents: 'none', zIndex: 1000 }}>
+      <style>{pulseKeyframes}</style>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+        <div style={{ position: 'relative', width: '14px', height: '14px', animation: 'floatDot 2s ease-in-out infinite' }}>
+          <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#C8A96E', animation: 'pulseRing 1.8s ease-out infinite', opacity: 0.4, transform: 'scale(2)' }} />
+          <div style={{ position: 'absolute', inset: '3px', borderRadius: '50%', background: isHovered ? '#fff' : '#C8A96E', boxShadow: '0 0 8px rgba(200,169,110,0.8)', transition: 'background 0.2s' }} />
+        </div>
+        <div style={{ background: 'rgba(20,18,14,0.88)', border: `1px solid ${isHovered ? '#C8A96E' : 'rgba(200,169,110,0.35)'}`, color: isHovered ? '#fff' : '#C8A96E', fontFamily: 'Space Mono, monospace', fontSize: '10px', padding: '4px 10px', borderRadius: '3px', whiteSpace: 'nowrap', letterSpacing: '0.12em', textTransform: 'uppercase', transition: 'all 0.2s', opacity: isHovered ? 1 : 0.75 }}>
+          {isHovered ? `[ ${label} ]` : label}
+        </div>
       </div>
     </Html>
   );
 }
 
 export function WorkspaceModel(props) {
-  const { scene, nodes, materials } = useGLTF('/workspace.glb');
+  const { scene, nodes, materials } = useGLTF('/HomeWorkspace.glb');
   const dinoTexture = useTexture('/wp10154671.jpg');
   const { camera } = useThree();
 
@@ -40,78 +48,39 @@ export function WorkspaceModel(props) {
   useEffect(() => {
     scene.traverse((child) => {
       if (child.isMesh) {
-        if (child.position.y > 100 && child.name !== 'cup' && child.name !== 'book' && !child.name.includes('10126')) {
-          child.visible = false;
-        }
-        if (child.name === 'Plane') {
-          child.visible = false;
-        }
         child.castShadow = true;
         child.receiveShadow = true;
       }
     });
   }, [scene, nodes]);
 
-  // Hide the lego character as requested
+  // Store original transforms for interactive objects
   useEffect(() => {
-    if (nodes.lego) {
-      nodes.lego.visible = false;
-    }
-  }, [nodes.lego]);
-
-  // Store original transforms once
-  useEffect(() => {
-    if (nodes.cup && !nodes.cup.userData.originalScale) {
-      nodes.cup.userData.originalScale = nodes.cup.scale.clone();
-      nodes.cup.userData.originalPos = nodes.cup.position.clone();
-      nodes.cup.userData.originalRot = nodes.cup.rotation.clone();
-    }
-    if (nodes.book && !nodes.book.userData.originalScale) {
-      nodes.book.userData.originalScale = nodes.book.scale.clone();
-      nodes.book.userData.originalPos = nodes.book.position.clone();
-      nodes.book.userData.originalRot = nodes.book.rotation.clone();
-    }
-
-    // Setup phone node from merged GLB
-    const phoneNodeName = Object.keys(nodes).find(n => n.includes('10126_Traditional'));
-    if (phoneNodeName && nodes[phoneNodeName]) {
-      const phoneNode = nodes[phoneNodeName];
-      if (!phoneNode.userData.originalScale) {
-        phoneNode.traverse((child) => {
-          if (child.isMesh) {
-            child.castShadow = true;
-            child.receiveShadow = true;
-            child.material = new THREE.MeshStandardMaterial({
-              color: '#1a1a1a',
-              roughness: 0.2,
-              metalness: 0.8
-            });
-          }
-        });
-        phoneNode.userData.originalScale = phoneNode.scale.clone();
-        phoneNode.userData.originalPos = phoneNode.position.clone();
-        phoneNode.userData.originalRot = phoneNode.rotation.clone();
+    const interactiveNodes = ['drawer', 'Keyboard', 'Decorations', 'PC'];
+    interactiveNodes.forEach(name => {
+      const n = nodes[name];
+      if (n && !n.userData.originalScale) {
+        n.userData.originalScale = n.scale.clone();
+        n.userData.originalPos = n.position.clone();
+        n.userData.originalRot = n.rotation.clone();
       }
-    }
+    });
 
-    // Apply new background to the monitor screen robustly
+    // Apply screen wallpaper texture onto the PC monitor mesh
     dinoTexture.flipY = true;
     dinoTexture.colorSpace = THREE.SRGBColorSpace;
     dinoTexture.needsUpdate = true;
-
+    // The PC node has 26 primitives — find the monitor screen face by material name or index
     scene.traverse((child) => {
       if (child.isMesh && child.material) {
         const mats = Array.isArray(child.material) ? child.material : [child.material];
         mats.forEach(mat => {
-          if (
-            mat.name.includes('apex') ||
-            child.name.includes('apex') ||
-            (mat.map && mat.map.name && mat.map.name.includes('apex'))
-          ) {
+          // Target screen-like materials (emissive black ones used for monitor faces)
+          if (mat.name && (mat.name.toLowerCase().includes('screen') || mat.name.toLowerCase().includes('monitor') || mat.name.toLowerCase().includes('display'))) {
             mat.map = dinoTexture;
             mat.emissive = new THREE.Color('#ffffff');
             mat.emissiveMap = dinoTexture;
-            mat.emissiveIntensity = 0.5;
+            mat.emissiveIntensity = 0.6;
             mat.color = new THREE.Color('#ffffff');
             mat.needsUpdate = true;
           }
@@ -120,10 +89,29 @@ export function WorkspaceModel(props) {
     });
   }, [nodes, scene, dinoTexture]);
 
+  // Map from Three.js mesh/node names to section names.
+  // This new GLB has merged everything into 11 clean nodes.
+  // For multi-primitive nodes, Three.js names them: MeshName, MeshName_1, MeshName_2, etc.
+  // Node names (single-prim or used directly): PC, Chair, drawer, Mouse, Keyboard, CPU, Shelf, Decorations, Desk
+  const getMeshSection = (meshName) => {
+    if (!meshName) return null;
+    // PC node → projects (click the monitor/computer)
+    if (meshName === 'PC' || meshName.startsWith('Circle007')) return 'screen';
+    // Keyboard → experience (you type your experience)
+    if (meshName === 'Keyboard' || meshName.startsWith('Cube022')) return 'book';
+    // Decorations (shelf decorations, picture frames etc) → socials
+    if (meshName === 'Decorations' || meshName.startsWith('Cube035')) return 'phone';
+    // Drawer → about me
+    if (meshName === 'drawer' || meshName.startsWith('Cube012')) return 'cup';
+    return null;
+  };
+
   const getInteractable = (obj) => {
+    // Walk up to find nearest ancestor whose name or mesh maps to a section
     let current = obj;
-    while (current && current.name !== 'Scene') {
-      if (current.name === 'cup' || current.name === 'book' || current.name === 'Plane' || current.name === 'PC' || current.name.includes('10126') || current.name === 'phone') return current;
+    while (current) {
+      const section = getMeshSection(current.name);
+      if (section) return { node: current, section };
       current = current.parent;
     }
     return null;
@@ -131,175 +119,88 @@ export function WorkspaceModel(props) {
 
   const getCanonicalName = (rawName) => {
     if (!rawName) return null;
-    if (rawName === 'Plane' || rawName === 'PC') return 'screen';
-    if (rawName.includes('10126')) return 'phone';
-    return rawName;
+    if (rawName === 'Screen') return 'screen';
+    if (rawName === 'Mug') return 'cup';
+    if (rawName.startsWith('Paper Folder')) return 'book';
+    if (rawName.startsWith('Picture Frame')) return 'phone';
+    return null;
   };
 
   const handlePointerOver = (e) => {
-    const obj = getInteractable(e.object);
-    if (obj) {
+    const result = getInteractable(e.object);
+    if (result) {
       e.stopPropagation();
       document.body.style.cursor = 'none';
-      const name = getCanonicalName(obj.name);
-      setHoveredObject(name);
-      if (name === 'cup' || name === 'book' || name === 'phone') {
-        gsap.to(obj.scale, {
-          x: obj.userData.originalScale.x * 1.03,
-          y: obj.userData.originalScale.y * 1.03,
-          z: obj.userData.originalScale.z * 1.03,
-          duration: 0.2
-        });
-      }
+      setHoveredObject(result.section);
     }
   };
 
   const handlePointerOut = (e) => {
-    const obj = getInteractable(e.object);
-    if (obj) {
+    const result = getInteractable(e.object);
+    if (result) {
       e.stopPropagation();
       setHoveredObject(null);
-      const name = getCanonicalName(obj.name);
-      if (name === 'cup' || name === 'book' || name === 'phone') {
-        gsap.to(obj.scale, {
-          x: obj.userData.originalScale.x,
-          y: obj.userData.originalScale.y,
-          z: obj.userData.originalScale.z,
-          duration: 0.2
-        });
-      }
     }
   };
 
   const handleClick = (e) => {
-    const obj = getInteractable(e.object);
-    if (obj) {
-      e.stopPropagation();
+    const result = getInteractable(e.object);
+    const section = result?.section;
+    console.log('[CLICK] raw:', e.object.name, '→ section:', section, '| active:', useSceneStore.getState().activeSection);
+    if (!result) return;
+    e.stopPropagation();
 
-      if (activeSection !== 'HOME' && activeSection !== 'TRANSITION' && activeSection !== 'LOADING') {
-        setActiveSection('HOME');
-        return;
-      }
-
-      const name = getCanonicalName(obj.name);
-
-      if (name === 'cup' || name === 'book' || name === 'phone') {
-        gsap.to(obj.scale, {
-          x: obj.userData.originalScale.x * 0.95,
-          y: obj.userData.originalScale.y * 0.95,
-          z: obj.userData.originalScale.z * 0.95,
-          duration: 0.1,
-          yoyo: true,
-          repeat: 1
-        });
-      }
-
-      setActiveSection('TRANSITION');
-
-      if (name === 'cup') {
-        const localTarget = new THREE.Vector3(-15, -5, -40);
-        const targetWorldPos = localTarget.applyMatrix4(camera.matrixWorld);
-        const targetLocalPos = obj.parent.worldToLocal(targetWorldPos);
-
-        const dummy = new THREE.Object3D();
-        dummy.position.copy(targetWorldPos);
-        dummy.lookAt(camera.position);
-        obj.parent.add(dummy);
-        const targetLocalRot = dummy.rotation.clone();
-        obj.parent.remove(dummy);
-
-        gsap.to(nodes.cup.rotation, { x: targetLocalRot.x, y: targetLocalRot.y + (4 * Math.PI), z: targetLocalRot.z, duration: 0.8, ease: "power2.inOut" });
-        gsap.to(nodes.cup.position, { x: targetLocalPos.x, y: targetLocalPos.y, z: targetLocalPos.z, duration: 0.8, ease: "power2.inOut" });
-        setTimeout(() => setActiveSection('ABOUT'), 1000);
-      } else if (name === 'book') {
-        const localTarget = new THREE.Vector3(15, -5, -40);
-        const targetWorldPos = localTarget.applyMatrix4(camera.matrixWorld);
-        const targetLocalPos = obj.parent.worldToLocal(targetWorldPos);
-
-        const dummy = new THREE.Object3D();
-        dummy.position.copy(targetWorldPos);
-        dummy.lookAt(camera.position);
-
-        // Spin it to face front and stand up
-        dummy.rotateX(Math.PI / 2);
-        dummy.rotateZ(Math.PI / 2);
-
-        obj.parent.add(dummy);
-        const targetLocalRot = dummy.rotation.clone();
-        obj.parent.remove(dummy);
-
-        gsap.to(nodes.book.rotation, { x: targetLocalRot.x, y: targetLocalRot.y + (2 * Math.PI), z: targetLocalRot.z, duration: 0.8, ease: "power2.inOut" });
-        gsap.to(nodes.book.position, { x: targetLocalPos.x, y: targetLocalPos.y, z: targetLocalPos.z, duration: 0.8, ease: "power2.inOut" });
-        setTimeout(() => setActiveSection('EXPERIENCE'), 1000);
-      } else if (name === 'phone') {
-        const localTarget = new THREE.Vector3(0, -10, -35); // Lower middle
-        const targetWorldPos = localTarget.applyMatrix4(camera.matrixWorld);
-        const targetLocalPos = obj.parent.worldToLocal(targetWorldPos);
-
-        const dummy = new THREE.Object3D();
-        dummy.position.copy(targetWorldPos);
-        dummy.lookAt(camera.position);
-
-        obj.parent.add(dummy);
-        const targetLocalRot = dummy.rotation.clone();
-        obj.parent.remove(dummy);
-
-        gsap.to(obj.rotation, { x: targetLocalRot.x, y: targetLocalRot.y + (2 * Math.PI), z: targetLocalRot.z, duration: 0.8, ease: "power2.inOut" });
-        gsap.to(obj.position, { x: targetLocalPos.x, y: targetLocalPos.y, z: targetLocalPos.z, duration: 0.8, ease: "power2.inOut" });
-        setTimeout(() => setActiveSection('SOCIALS'), 1000);
-      } else if (name === 'screen') {
-        setTimeout(() => setActiveSection('PROJECTS'), 1800);
-      }
+    const currentSection = useSceneStore.getState().activeSection;
+    if (currentSection !== 'HOME' && currentSection !== 'TRANSITION' && currentSection !== 'LOADING') {
+      setActiveSection('HOME');
+      return;
     }
+
+    if (section === 'cup') setActiveSection('ABOUT');
+    else if (section === 'book') setActiveSection('EXPERIENCE');
+    else if (section === 'phone') setActiveSection('SOCIALS');
+    else if (section === 'screen') setActiveSection('PROJECTS');
   };
 
   // Restore objects when back to home
   useEffect(() => {
     if (activeSection === 'HOME') {
-      if (nodes.cup && nodes.cup.userData.originalPos) {
-        gsap.to(nodes.cup.position, { x: nodes.cup.userData.originalPos.x, y: nodes.cup.userData.originalPos.y, z: nodes.cup.userData.originalPos.z, duration: 0.8, ease: "power2.inOut" });
-        gsap.to(nodes.cup.rotation, { x: nodes.cup.userData.originalRot.x, y: nodes.cup.userData.originalRot.y, z: nodes.cup.userData.originalRot.z, duration: 0.8, ease: "power2.inOut" });
-      }
-      if (nodes.book && nodes.book.userData.originalPos) {
-        gsap.to(nodes.book.position, { x: nodes.book.userData.originalPos.x, y: nodes.book.userData.originalPos.y, z: nodes.book.userData.originalPos.z, duration: 0.8, ease: "power2.inOut" });
-        gsap.to(nodes.book.rotation, { x: nodes.book.userData.originalRot.x, y: nodes.book.userData.originalRot.y, z: nodes.book.userData.originalRot.z, duration: 0.8, ease: "power2.inOut" });
-      }
-      const phoneNodeName = Object.keys(nodes).find(n => n.includes('10126_Traditional'));
-      if (phoneNodeName && nodes[phoneNodeName] && nodes[phoneNodeName].userData.originalPos) {
-        const phoneNode = nodes[phoneNodeName];
-        gsap.to(phoneNode.position, { x: phoneNode.userData.originalPos.x, y: phoneNode.userData.originalPos.y, z: phoneNode.userData.originalPos.z, duration: 0.8, ease: "power2.inOut" });
-        gsap.to(phoneNode.rotation, { x: phoneNode.userData.originalRot.x, y: phoneNode.userData.originalRot.y, z: phoneNode.userData.originalRot.z, duration: 0.8, ease: "power2.inOut" });
-      }
+      ['drawer', 'Keyboard', 'Decorations', 'PC'].forEach(name => {
+        const n = nodes[name];
+        if (n && n.userData.originalPos) {
+          gsap.to(n.position, { x: n.userData.originalPos.x, y: n.userData.originalPos.y, z: n.userData.originalPos.z, duration: 0.8, ease: "power2.inOut" });
+          gsap.to(n.rotation, { x: n.userData.originalRot.x, y: n.userData.originalRot.y, z: n.userData.originalRot.z, duration: 0.8, ease: "power2.inOut" });
+        }
+      });
     }
   }, [activeSection, nodes]);
-
-  const phoneNodeName = Object.keys(nodes).find(n => n.includes('10126_Traditional'));
-  const phoneNode = phoneNodeName ? nodes[phoneNodeName] : null;
 
   return (
     <group {...props} dispose={null}>
       <primitive
         object={scene}
+        scale={100}
+        position={[0, -20, 0]}
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
         onClick={handleClick}
       />
 
-      {/* Tooltips */}
-      {nodes.cup && activeSection === 'HOME' && hoveredObject === 'cup' && (
-        <Tooltip node={nodes.cup} text="about me" yOffset={15} />
+      {/* Always-visible interaction hints with precise manual coordinates */}
+      {nodes.drawer && activeSection === 'HOME' && (
+        <InteractHint position={[-40, 35, 10]} label="about me" isHovered={hoveredObject === 'cup'} />
       )}
-      {nodes.book && activeSection === 'HOME' && hoveredObject === 'book' && (
-        <Tooltip node={nodes.book} text="experience" yOffset={10} />
+      {nodes.Keyboard && activeSection === 'HOME' && (
+        <InteractHint position={[0, 42, 10]} label="experience" isHovered={hoveredObject === 'book'} />
       )}
-      {phoneNode && activeSection === 'HOME' && useSceneStore.getState().isLoaded !== false && hoveredObject === 'phone' && (
-        <Tooltip node={phoneNode} text="contacts" yOffset={10} />
+      {nodes.Decorations && activeSection === 'HOME' && (
+        <InteractHint position={[5, 105, -20]} label="contacts" isHovered={hoveredObject === 'phone'} />
       )}
-      {nodes.PC && activeSection === 'HOME' && hoveredObject === 'screen' && (
-        <Tooltip node={nodes.PC} text="projects" yOffset={25} />
+      {nodes.PC && activeSection === 'HOME' && (
+        <InteractHint position={[0, 65, -10]} label="projects" isHovered={hoveredObject === 'screen'} />
       )}
     </group>
   );
 }
 
-useGLTF.preload('/workspace.glb');
+useGLTF.preload('/HomeWorkspace.glb');

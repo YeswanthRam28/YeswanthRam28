@@ -4,13 +4,14 @@
   --font-display: 'Bebas Neue', sans-serif;
   --font-mono: 'Space Mono', monospace;
   
-  --color-bg:       #030305;
-  --color-surface:  #0d0d12;
-  --color-border:   #1a1a24;
-  --color-accent:   #D4FF00;
-  --color-white:    #FFFFFF;
-  --color-muted:    #888888;
-  --color-dim:      #444444;
+  /* Workspace-inspired palette */
+  --color-bg:       #1a1814;       /* Deep warm charcoal — like the dark chair/room */
+  --color-surface:  rgba(30, 27, 22, 0.93);  /* Slightly lighter warm surface */
+  --color-border:   rgba(180, 145, 90, 0.25); /* Warm wood-grain gold */
+  --color-accent:   #C8A96E;       /* Warm wood/amber — matches the desk material */
+  --color-white:    #F5F0E8;       /* Off-white — matches the room walls */
+  --color-muted:    #9A9080;       /* Warm gray muted text */
+  --color-dim:      #5A5448;       /* Dim warm gray */
 }
 
 * {
