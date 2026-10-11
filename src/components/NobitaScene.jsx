@@ -1,10 +1,14 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, Suspense } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
-import { OrbitControls, useGLTF } from '@react-three/drei';
+import { OrbitControls, useGLTF, useProgress } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Preload 3D Model
-useGLTF.preload('/Nobita.glb');
+// Paths configured with BASE_URL for root and subpath production deployments
+const MODEL_URL = `${import.meta.env.BASE_URL}Nobita.glb`;
+const DRACO_URL = `${import.meta.env.BASE_URL}draco/`;
+
+// Preload 3D Model with local Draco decoder
+useGLTF.preload(MODEL_URL, DRACO_URL);
 
 // Exact world centers and interactive collision boxes computed from mesh geometry
 const OBJECT_CONFIGS = {
@@ -75,7 +79,7 @@ function InteractionCollider({ position, size, sectionId, onHover, onUnhover, on
 
 // 3D Room Model with Direct Mesh Association & Hover Feedback
 function RoomModel({ onSelectSection, hoveredSection, setHoveredSection }) {
-  const { scene } = useGLTF('/Nobita.glb');
+  const { scene } = useGLTF(MODEL_URL, DRACO_URL);
   const sectionMeshesRef = useRef({ projects: [], experience: [], about: [], socials: [] });
 
   // Map 3D meshes to sections & preserve materials
@@ -365,9 +369,51 @@ function BlenderCameraController() {
 
 export default function NobitaScene({ onSelectSection }) {
   const [hoveredSection, setHoveredSection] = useState(null);
+  const { active, progress } = useProgress();
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}>
+      {/* Loading Progress Pill if model is loading */}
+      {active && progress < 100 && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 300,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '12px',
+            backgroundColor: 'rgba(10, 10, 15, 0.95)',
+            border: '1px solid rgba(168, 235, 12, 0.3)',
+            borderRadius: '16px',
+            padding: '20px 32px',
+            backdropFilter: 'blur(16px)',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(168, 235, 12, 0.2)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#a8eb0c', boxShadow: '0 0 10px #a8eb0c' }} />
+            <span style={{ fontFamily: "'Space Grotesk', monospace", fontSize: '12px', color: '#f5f5f7', letterSpacing: '0.12em' }}>
+              INITIALIZING 3D ENVIRONMENT {Math.round(progress)}%
+            </span>
+          </div>
+          <div style={{ width: '180px', height: '3px', backgroundColor: 'rgba(255, 255, 255, 0.1)', borderRadius: '10px', overflow: 'hidden' }}>
+            <div
+              style={{
+                width: `${progress}%`,
+                height: '100%',
+                backgroundColor: '#a8eb0c',
+                boxShadow: '0 0 8px #a8eb0c',
+                transition: 'width 0.2s ease',
+              }}
+            />
+          </div>
+        </div>
+      )}
+
       <Canvas
         shadows
         camera={{ position: [16.0, 26.0, 44.0], fov: 50 }}
@@ -396,11 +442,13 @@ export default function NobitaScene({ onSelectSection }) {
         <pointLight position={[0, 2, 15]} intensity={0.35} distance={40} color="#a8eb0c" />
 
         <BlenderCameraController />
-        <RoomModel
-          onSelectSection={onSelectSection}
-          hoveredSection={hoveredSection}
-          setHoveredSection={setHoveredSection}
-        />
+        <Suspense fallback={null}>
+          <RoomModel
+            onSelectSection={onSelectSection}
+            hoveredSection={hoveredSection}
+            setHoveredSection={setHoveredSection}
+          />
+        </Suspense>
       </Canvas>
 
       {/* Real-time Hover Indicator Badge */}
