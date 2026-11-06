@@ -1,0 +1,6 @@
+{
+  "name": "Nobita's Room — 3D Developer Portfolio",
+  "description": "An interactive first-person 3D developer portfolio for Yeswanth Ram inspired by Nobita's bedroom, featuring a mini desktop OS, skill bookshelf, achievement board, and guided tour.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
